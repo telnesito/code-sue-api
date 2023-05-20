@@ -52,9 +52,20 @@ const actualizarClave = async (req, res) => {
   } catch (error) {
     res.json(error)
   }
+}
 
+const cargarPerfil = (req, res) => {
+  const user = auth.currentUser;
+
+  if (user !== null) {
+    const email = user.email
+    const uid = user.uid
+    res.json({ email, uid })
+  } else {
+    res.json({ 'Error': 'No existe un usuario logueado' })
+  }
 }
 
 
 
-export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave }
+export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave, cargarPerfil }
