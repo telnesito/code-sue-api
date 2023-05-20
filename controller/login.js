@@ -1,4 +1,5 @@
-0
+import { pool } from "../database/db.js";
+
 const getUsers = async (req, res) => {
 
   try {
