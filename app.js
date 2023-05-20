@@ -1,6 +1,7 @@
 import express from "express";
 import cors from 'cors'
-import router from "./routes/routes.js";
+import loginRoutes from "./routes/loginRoutes.js";
+import proyectosRoutes from "./routes/proyectosRoutes.js";
 
 const app = express()
 
@@ -9,6 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 
-app.use('/usuarios', router)
+app.use('/usuarios', loginRoutes)
+app.use('/proyectos', proyectosRoutes)
 
 export default app
