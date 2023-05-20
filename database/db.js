@@ -3,7 +3,7 @@ import pkg from 'pg'
 const config = {
   user: 'postgres',
   host: 'localhost',
-  password: 'pas123',
+  password: '27728122',
   database: 'codesue'
 }
 
