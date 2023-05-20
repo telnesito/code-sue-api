@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { metodos } from "../controller/login.js";
+import { metodosAuth } from "../controller/auth.js";
 
 const loginRoutes = Router()
 
-loginRoutes.post('/login', metodos.getUsers)
-loginRoutes.post('/create-account', metodos.setUsers)
+loginRoutes.post('/login', metodosAuth.iniciarSesion)
+loginRoutes.post('/create-account', metodosAuth.crearCuenta)
 
 
 
