@@ -5,6 +5,7 @@ const loginRoutes = Router()
 
 loginRoutes.post('/login', metodosAuth.iniciarSesion)
 loginRoutes.post('/create-account', metodosAuth.crearCuenta)
+loginRoutes.post('/update-password', metodosAuth.actualizarClave)
 
 
 
