@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, onAuthStateChanged } from "firebase/auth";
 import { services } from '../database/db.js'
 
 const { auth } = services
@@ -9,7 +9,6 @@ const iniciarSesion = async (req, res) => {
     const { email, password } = req.body
 
     const response = await signInWithEmailAndPassword(auth, email, password)
-
     const { user } = response
 
     res.json(user)
@@ -27,19 +26,35 @@ const crearCuenta = async (req, res) => {
 
     const { email, password } = req.body
 
-    const usuarioNuevo = createUserWithEmailAndPassword(auth, email, password)
+    const usuarioNuevo = await createUserWithEmailAndPassword(auth, email, password)
     const { user } = usuarioNuevo
-
-    res.json('Usuario creado correctamente')
+    res.json(user)
     res.status(200)
 
 
-  } catch ({ message, code }) {
-
-    res.json(`${message} ${code}`)
-    res.status(400)
-
+  } catch (error) {
+    const { message, code } = error;
+    res.status(400).json(`${message} ${code}`);
   }
 }
 
-export const metodosAuth = { iniciarSesion, crearCuenta }
+const actualizarClave = async (req, res) => {
+
+  const { newPassowrd } = req.body
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      // res.json('No hay usuario iniciado')
+    }
+    await updatePassword(user, newPassowrd)
+    res.json('Clave actualizada')
+
+  } catch (error) {
+    res.json(error)
+  }
+
+}
+
+
+
+export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave }
