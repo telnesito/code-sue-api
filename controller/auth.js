@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut } from "firebase/auth";
 import { services } from '../database/db.js'
 
 const { auth } = services
@@ -81,5 +81,14 @@ const borrarUsusario = async (req, res) => {
 
 }
 
+const cerrarSesion = async (req, res) => {
+  try {
+    const response = await signOut(auth)
+    res.json("Sesion cerrada correctamente")
+  } catch (error) {
+    res.json("No existe una sesion activa")
+  }
+}
 
-export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario }
+
+export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario, cerrarSesion }
