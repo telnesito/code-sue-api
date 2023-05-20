@@ -23,6 +23,21 @@ const getUsers = async (req, res) => {
 
 }
 
+const setUsers = async (req, res) => {
+  try {
+    const { email, password, username, preguntaSeguridad, respuestaSeguridad } = req.body
+    const response = await pool.query(`INSERT INTO USUARIOS(email,username, password,preguntaSeguridad, respuestaSeguridad)values('${email}', '${username}', '${password}', '${preguntaSeguridad}', '${respuestaSeguridad}' )`)
+
+    res.json(response)
+    console.log(req.body)
+
+
+  } catch (error) {
+    res.status(500)
+    res.send(error.message)
+  }
+}
+
 export const metodos = {
-  getUsers
+  getUsers, setUsers
 }
