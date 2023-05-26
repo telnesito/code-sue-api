@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 import { services } from '../database/db.js'
 
-const { auth } = services
+const { auth, db } = services
 
 const iniciarSesion = async (req, res) => {
 
@@ -21,6 +22,18 @@ const iniciarSesion = async (req, res) => {
 
 }
 
+const saveUserData = async ({ uid, email }) => {
+
+  const userDoc = doc(db, 'users', uid)
+  await setDoc(userDoc, {
+    email,
+    projects: [{
+
+    }]
+  })
+
+}
+
 const crearCuenta = async (req, res) => {
   try {
 
@@ -28,6 +41,15 @@ const crearCuenta = async (req, res) => {
 
     const usuarioNuevo = await createUserWithEmailAndPassword(auth, email, password)
     const { user } = usuarioNuevo
+    saveUserData({
+      uid: user.uid,
+      email: user.email,
+      projects: [{
+
+      }]
+
+
+    })
     res.json(user)
     res.status(200)
 
