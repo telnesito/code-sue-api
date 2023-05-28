@@ -97,7 +97,7 @@ const updateProyecto = async (req, res) => {
       throw new Error('No existe un usuario logueado')
     }
   } catch (error) {
-    res.json(error)
+    res.json({ error: error.message })
   }
 }
 
