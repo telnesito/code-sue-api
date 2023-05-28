@@ -26,10 +26,7 @@ const saveUserData = async ({ uid, email }) => {
 
   const userDoc = doc(db, 'users', uid)
   await setDoc(userDoc, {
-    email,
-    projects: [{
-
-    }]
+    email
   })
 
 }
@@ -44,9 +41,6 @@ const crearCuenta = async (req, res) => {
     saveUserData({
       uid: user.uid,
       email: user.email,
-      projects: [{
-
-      }]
 
 
     })

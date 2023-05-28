@@ -1,26 +1,31 @@
-import { doc, updateDoc } from "firebase/firestore"
+import { doc, collection, setDoc, getDocs } from "firebase/firestore"
 import { services } from "../database/db.js"
 
-const { db } = services
+const { db, auth } = services
 
 const createProyecto = async (req, res) => {
   try {
-    const { nombre, contenido, lenguaje, fecha, uid } = req.body
+    const { nombre, contenido, lenguaje, fecha } = req.body
 
-    const projectRef = doc(db, 'users', uid)
 
-    await updateDoc(projectRef, {
-      "projects.nombre": nombre,
-      "projects.contenido": contenido,
-      "projects.lenguaje": lenguaje,
-      "projects.fecha": fecha
-    })
+    if (auth.currentUser) {
+      const { uid } = auth.currentUser
+      const projectDoc = doc(collection(db, 'users', uid, 'proyectos'))
+      await setDoc(projectDoc,
+        {
+          nombre,
+          contenido,
+          lenguaje,
+          fecha,
+        }
+      )
+    } else {
+      throw new Error("No existe un usuario logueado")
+    }
 
     res.json('Proyecto creado')
-    console.error('hola')
 
   } catch (error) {
-    res.json('Error')
     res.json(error.message)
 
   }
@@ -28,15 +33,31 @@ const createProyecto = async (req, res) => {
 
 const getProyetos = async (req, res) => {
 
+
+  const proyectosData = [];
+
   try {
-    console.log('Obteniendo proyectos')
-    res.json('Obteniendo proyectos')
+
+    if (auth.currentUser) {
+      const { uid } = auth.currentUser
+      const querySnapshot = await getDocs(collection(db, "users", uid, "proyectos"));
+
+      querySnapshot.forEach((doc) => {
+        const proyecto = doc.data();
+        proyectosData.push(proyecto);
+      });
+    } else {
+      throw new Error("No existe un usuario logueado")
+    }
+
+
+    res.json(proyectosData);
+
   } catch (error) {
-    res.json(error.message)
-
+    res.json({ error: error.message });
   }
+};
 
-}
 
 
 export const metodosProjects = { getProyetos, createProyecto }
