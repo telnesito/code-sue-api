@@ -1,4 +1,4 @@
-import { doc, collection, setDoc, getDocs } from "firebase/firestore"
+import { doc, collection, setDoc, getDocs, deleteDoc } from "firebase/firestore"
 import { services } from "../database/db.js"
 
 const { db, auth } = services
@@ -44,6 +44,7 @@ const getProyetos = async (req, res) => {
 
       querySnapshot.forEach((doc) => {
         const proyecto = doc.data();
+        proyecto.id = doc.id
         proyectosData.push(proyecto);
       });
     } else {
@@ -58,6 +59,20 @@ const getProyetos = async (req, res) => {
   }
 };
 
+const deleteProyectos = async (req, res) => {
+  try {
+
+    const { uid } = auth.currentUser
+    const { idProject } = req.body
+
+    await deleteDoc(doc(db, 'users', uid, "proyectos", idProject))
+    res.json(`Proyecto id: ${idProject} eliminado`)
+  } catch (error) {
+    res.json(error)
+
+  }
+}
 
 
-export const metodosProjects = { getProyetos, createProyecto }
+
+export const metodosProjects = { getProyetos, createProyecto, deleteProyectos }
