@@ -1,11 +1,11 @@
-import { doc, collection, setDoc, getDocs, deleteDoc } from "firebase/firestore"
+import { doc, collection, setDoc, getDocs, deleteDoc, updateDoc } from "firebase/firestore"
 import { services } from "../database/db.js"
 
 const { db, auth } = services
 
 const createProyecto = async (req, res) => {
   try {
-    const { nombre, contenido, lenguaje, fecha } = req.body
+    const { nombre, contenido, lenguaje, fecha, ultimoCambio } = req.body
 
 
     if (auth.currentUser) {
@@ -17,6 +17,7 @@ const createProyecto = async (req, res) => {
           contenido,
           lenguaje,
           fecha,
+          ultimoCambio
         }
       )
     } else {
@@ -62,17 +63,44 @@ const getProyetos = async (req, res) => {
 const deleteProyectos = async (req, res) => {
   try {
 
-    const { uid } = auth.currentUser
-    const { idProject } = req.body
+    if (auth.currentUser) {
+      const { uid } = auth.currentUser
+      const { idProject } = req.body
+      await deleteDoc(doc(db, 'users', uid, "proyectos", idProject))
+      res.json(`Proyecto id: ${idProject} eliminado`)
 
-    await deleteDoc(doc(db, 'users', uid, "proyectos", idProject))
-    res.json(`Proyecto id: ${idProject} eliminado`)
+    } else {
+      throw new Error('No existe un usuario logueado')
+    }
+
   } catch (error) {
     res.json(error)
 
   }
 }
 
+const updateProyecto = async (req, res) => {
+
+  try {
+    if (auth.currentUser) {
+
+      const { uid } = auth.currentUser
+      const { idProject, contenido, ultimoCambio } = req.body
+      const projectRef = doc(db, "users", uid, "proyectos", idProject)
+
+      await updateDoc(projectRef, {
+        contenido,
+        ultimoCambio
+      })
+      res.json('Archivo actualizado')
+    } else {
+      throw new Error('No existe un usuario logueado')
+    }
+  } catch (error) {
+    res.json(error)
+  }
+}
 
 
-export const metodosProjects = { getProyetos, createProyecto, deleteProyectos }
+
+export const metodosProjects = { getProyetos, createProyecto, deleteProyectos, updateProyecto }
