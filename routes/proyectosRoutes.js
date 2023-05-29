@@ -1,13 +1,21 @@
+// Importamos Router desde Express
 import { Router } from "express";
+
+// Importamos el controlador de proyectos
 import { metodosProjects } from "../controller/proyectos.js";
 
-const proyectosRoutes = Router()
+// Creamos una instancia de Router
+const proyectosRoutes = Router();
 
-proyectosRoutes.post('/crear-proyecto', metodosProjects.createProyecto)
-proyectosRoutes.get('/ver-proyectos', metodosProjects.getProyetos)
-proyectosRoutes.delete('/eliminar-proyecto', metodosProjects.deleteProyectos)
-proyectosRoutes.put('/actualizar-proyecto', metodosProjects.updateProyecto)
+// Definimos las diferentes rutas para la gestión de proyectos
+// Crear proyecto
+proyectosRoutes.post("/crear-proyecto", metodosProjects.createProyecto);
+// Ver proyectos
+proyectosRoutes.get("/ver-proyectos", metodosProjects.getProyetos);
+// Eliminar proyecto
+proyectosRoutes.delete("/eliminar-proyecto", metodosProjects.deleteProyectos);
+// Actualizar proyecto
+proyectosRoutes.put("/actualizar-proyecto", metodosProjects.updateProyecto);
 
-
-
-export default proyectosRoutes
+// Exportamos las rutas para poder utilizarlas en otros archivos
+export default proyectosRoutes;
