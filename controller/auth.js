@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut, sendPasswordResetEmail, sendEmailVerification } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { services } from '../database/db.js'
 
@@ -106,5 +106,34 @@ const cerrarSesion = async (req, res) => {
   }
 }
 
+const recuperarClave = async (req, res) => {
+  const { email } = req.body
 
-export const metodosAuth = { iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario, cerrarSesion }
+  try {
+    const response = await sendPasswordResetEmail(auth, email)
+
+    res.json('Correo de recuperacion enviado!')
+  }
+  catch (error) {
+    res.json(error.message)
+
+  }
+}
+
+const verificarCorreo = async (req, res) => {
+  try {
+
+    if (auth.currentUser) {
+      await sendEmailVerification(auth.currentUser)
+      res.json('Email de verificacion enviado')
+    } else {
+      throw new Error("No existe un usuario logueado")
+    }
+  } catch (error) {
+    res.json(error.message)
+
+  }
+}
+
+
+export const metodosAuth = { verificarCorreo, recuperarClave, iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario, cerrarSesion }

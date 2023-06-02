@@ -9,6 +9,8 @@ loginRoutes.post('/update-password', metodosAuth.actualizarClave)
 loginRoutes.get('/get-profile', metodosAuth.cargarPerfil)
 loginRoutes.delete('/delete-user', metodosAuth.borrarUsusario)
 loginRoutes.get('/logout', metodosAuth.cerrarSesion)
+loginRoutes.post('/recover-password', metodosAuth.recuperarClave)
+loginRoutes.get('/verify-email', metodosAuth.verificarCorreo)
 
 
 
