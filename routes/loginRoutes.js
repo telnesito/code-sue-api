@@ -23,5 +23,7 @@ loginRoutes.get("/logout", metodosAuth.cerrarSesion);
 loginRoutes.post('/recover-password', metodosAuth.recuperarClave)
 loginRoutes.get('/verify-email', metodosAuth.verificarCorreo)
 
+loginRoutes.get('/get-all-users', metodosAuth.obtenerUsuarios)
+
 // Exportamos las rutas para poder utilizarlas en otros archivos
 export default loginRoutes;

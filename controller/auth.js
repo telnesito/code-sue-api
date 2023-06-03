@@ -1,9 +1,21 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut, sendPasswordResetEmail, sendEmailVerification } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, onSnapshot, collection } from "firebase/firestore";
 import { services } from "../database/db.js";
 
 // Desestructuramos las funciones de autenticación y base de datos de Firebase
 const { auth, db } = services;
+
+
+// Función para guardar los datos del usuario en la base de datos
+const saveUserData = async ({ uid, email, state, provider }) => {
+  // Creamos una referencia al documento del usuario en la colección "users" de la base de datos
+  const userDoc = doc(db, "users", uid);
+
+  // Establecemos los datos del usuario en el documento correspondiente
+  await setDoc(userDoc, {
+    uid, email, state
+  });
+};
 
 // Función para iniciar sesión
 const iniciarSesion = async (req, res) => {
@@ -12,6 +24,14 @@ const iniciarSesion = async (req, res) => {
     // Iniciamos sesión con el correo electrónico y la contraseña proporcionados
     const response = await signInWithEmailAndPassword(auth, email, password);
     const { user } = response;
+
+    // Guardamos los datos del usuario en la base de datos
+    saveUserData({
+      uid: user.uid,
+      email: user.email,
+      state: user.emailVerified,
+
+    });
 
     // Devolvemos el usuario en la respuesta
     res.json(user);
@@ -25,16 +45,7 @@ const iniciarSesion = async (req, res) => {
 
 
 
-// Función para guardar los datos del usuario en la base de datos
-const saveUserData = async ({ uid, email }) => {
-  // Creamos una referencia al documento del usuario en la colección "users" de la base de datos
-  const userDoc = doc(db, "users", uid);
 
-  // Establecemos los datos del usuario en el documento correspondiente
-  await setDoc(userDoc, {
-    email,
-  });
-};
 
 // Función para crear una cuenta de usuario
 const crearCuenta = async (req, res) => {
@@ -49,11 +60,6 @@ const crearCuenta = async (req, res) => {
     );
     const { user } = usuarioNuevo;
 
-    // Guardamos los datos del usuario en la base de datos
-    saveUserData({
-      uid: user.uid,
-      email: user.email,
-    });
 
     // Devolvemos el usuario en la respuesta
     res.json(user);
@@ -161,5 +167,22 @@ const verificarCorreo = async (req, res) => {
   }
 }
 
+const obtenerUsuarios = async (req, res) => {
+  const users = []
+  const q = collection(db, "users")
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.forEach((doc) => {
+      const { email, uid, state } = doc.data()
+      users.push({
+        email, uid, state
+      })
+    })
+    unsubscribe()
+    res.json(users)
+  })
 
-export const metodosAuth = { verificarCorreo, recuperarClave, iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario, cerrarSesion }
+
+}
+
+
+export const metodosAuth = { obtenerUsuarios, verificarCorreo, recuperarClave, iniciarSesion, crearCuenta, actualizarClave, cargarPerfil, borrarUsusario, cerrarSesion }
