@@ -23,6 +23,8 @@ const iniciarSesion = async (req, res) => {
   }
 };
 
+
+
 // Función para guardar los datos del usuario en la base de datos
 const saveUserData = async ({ uid, email }) => {
   // Creamos una referencia al documento del usuario en la colección "users" de la base de datos
@@ -92,7 +94,9 @@ const cargarPerfil = (req, res) => {
     // Si hay un usuario iniciado, devolvemos su correo electrónico y su UID en la respuesta
     const email = user.email;
     const uid = user.uid;
-    res.json({ email, uid });
+    const username = user.displayName
+    const emailVerified = user.emailVerified
+    res.json({ email, uid, username, emailVerified });
   } else {
     // Si no hay un usuario iniciado, devolvemos un mensaje de error en la respuesta
     res.json({ Error: "No existe un usuario logueado" });
