@@ -107,4 +107,21 @@ const updatePasswordById = async (req, res) => {
   }
 }
 
+const updateEmailById = async (req, res) => {
+  const { uid, newEmail } = req.body
+  try {
+
+    const response = await authAdmin.updateUser(uid, {
+      email: newEmail
+    })
+
+    res.json(response)
+
+
+
+  } catch (error) {
+    res.json(error)
+  }
+}
+
 export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById, updatePasswordById }
