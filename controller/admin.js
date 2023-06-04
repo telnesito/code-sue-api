@@ -54,11 +54,12 @@ const deleteProjectById = async (req, res) => {
 
 // Función para eliminar un usuario
 const deleteUserById = async (req, res) => {
-  const { uid } = req.body;
+  const { uid, user } = req.body;
 
   try {
     // Borramos el documento del proyecto correspondiente a partir de su ID
     await deleteDoc(doc(db, "users", uid));
+    await deleteUser(user);
     // Devolvemos un mensaje indicando que el proyecto se ha eliminado correctamente
     res.json(`Usuario id: ${uid} eliminado`);
 

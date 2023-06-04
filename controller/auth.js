@@ -7,7 +7,7 @@ const { auth, db } = services;
 
 
 // Función para guardar los datos del usuario en la base de datos
-const saveUserData = async ({ uid, email, state, provider }) => {
+const saveUserData = async ({ uid, email, state }) => {
   // Creamos una referencia al documento del usuario en la colección "users" de la base de datos
   const userDoc = doc(db, "users", uid);
 
@@ -24,6 +24,7 @@ const iniciarSesion = async (req, res) => {
     // Iniciamos sesión con el correo electrónico y la contraseña proporcionados
     const response = await signInWithEmailAndPassword(auth, email, password);
     const { user } = response;
+
 
     // Guardamos los datos del usuario en la base de datos
     saveUserData({
