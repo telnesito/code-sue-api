@@ -117,7 +117,7 @@ const borrarUsusario = async (req, res) => {
   try {
     // Borramos el usuario actual
     await deleteUser(user);
-    await deleteDoc(doc(db, "users", uid));
+    await deleteDoc(doc(db, "users", user.uid));
 
     // Devolvemos un mensaje indicando que el usuario se ha eliminado correctamente
     res.json("Usuario eliminado");
