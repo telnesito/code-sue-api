@@ -115,13 +115,15 @@ const updateEmailById = async (req, res) => {
       email: newEmail
     })
 
+    const userDoc = doc(db, "users", uid);
+    await updateDoc(userDoc, {
+      email: newEmail
+    })
+
     res.json(response)
-
-
-
   } catch (error) {
     res.json(error)
   }
 }
 
-export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById, updatePasswordById }
+export const metodosAdmin = { updateEmailById, getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById, updatePasswordById }

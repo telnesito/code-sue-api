@@ -9,6 +9,8 @@ adminRouter.delete('/delete-project', metodosAdmin.deleteProjectById)
 adminRouter.delete('/delete-user', metodosAdmin.deleteUserById)
 adminRouter.put('/update-state', metodosAdmin.verifiedUserById)
 adminRouter.put('/update-password', metodosAdmin.updatePasswordById)
+adminRouter.put('/update-email', metodosAdmin.updateEmailById)
+
 
 
 
