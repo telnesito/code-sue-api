@@ -86,13 +86,25 @@ const verifiedUserById = async (req, res) => {
       state: true
     })
     res.json(response.toJSON())
+  } catch (error) {
+    res.json(error)
+  }
+}
 
+const updatePasswordById = async (req, res) => {
+  const { uid, newPassword } = req.body
 
+  try {
+
+    const response = await authAdmin.updateUser(uid, {
+      password: newPassword
+    })
+
+    res.json(response)
 
   } catch (error) {
     res.json(error)
   }
-
 }
 
-export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById }
+export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById, updatePasswordById }
