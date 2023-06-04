@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, deleteUser, signOut, sendPasswordResetEmail, sendEmailVerification } from "firebase/auth";
-import { setDoc, doc, onSnapshot, collection } from "firebase/firestore";
+import { setDoc, doc, onSnapshot, collection, deleteDoc } from "firebase/firestore";
 import { services } from "../database/db.js";
 
 // Desestructuramos las funciones de autenticación y base de datos de Firebase
@@ -117,6 +117,7 @@ const borrarUsusario = async (req, res) => {
   try {
     // Borramos el usuario actual
     await deleteUser(user);
+    await deleteDoc(doc(db, "users", uid));
 
     // Devolvemos un mensaje indicando que el usuario se ha eliminado correctamente
     res.json("Usuario eliminado");
