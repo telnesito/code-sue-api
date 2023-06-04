@@ -52,4 +52,21 @@ const deleteProjectById = async (req, res) => {
   }
 };
 
-export const metodosAdmin = { getProjectsByUId, deleteProjectById }
+// Función para eliminar un usuario
+const deleteUserById = async (req, res) => {
+  const { uid } = req.body;
+
+  try {
+    // Borramos el documento del proyecto correspondiente a partir de su ID
+    await deleteDoc(doc(db, "users", uid));
+    // Devolvemos un mensaje indicando que el proyecto se ha eliminado correctamente
+    res.json(`Usuario id: ${uid} eliminado`);
+
+  } catch (error) {
+    // Si se produce un error, devolvemos el mensaje de error en la respuesta
+    res.json(error);
+  }
+};
+
+
+export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById }

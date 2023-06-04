@@ -6,5 +6,7 @@ const adminRouter = Router()
 
 adminRouter.post('/get-project', metodosAdmin.getProjectsByUId)
 adminRouter.delete('/delete-project', metodosAdmin.deleteProjectById)
+adminRouter.delete('/delete-user', metodosAdmin.deleteUserById)
+
 
 export default adminRouter  
