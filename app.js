@@ -5,6 +5,7 @@ import cors from "cors";
 // Importamos las rutas para el login y proyectos
 import loginRoutes from "./routes/loginRoutes.js";
 import proyectosRoutes from "./routes/proyectosRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 // Creamos una instancia de Express
 const app = express();
@@ -25,6 +26,7 @@ console.log(`Server on port ${port}`);
 // Definimos las rutas para el login y proyectos
 app.use("/usuarios", loginRoutes);
 app.use("/proyectos", proyectosRoutes);
+app.use("/admin", adminRouter)
 
 // Exportamos la aplicación para poder utilizarla en otros archivos
 export default app;
