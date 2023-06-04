@@ -5,6 +5,6 @@ import { Router } from "express";
 const adminRouter = Router()
 
 adminRouter.post('/get-project', metodosAdmin.getProjectsByUId)
+adminRouter.delete('/delete-project', metodosAdmin.deleteProjectById)
 
-
-export default adminRouter
+export default adminRouter  

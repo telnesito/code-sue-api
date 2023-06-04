@@ -36,4 +36,20 @@ const getProjectsByUId = async (req, res) => {
   }
 }
 
-export const metodosAdmin = { getProjectsByUId }
+// Función para eliminar un proyecto
+const deleteProjectById = async (req, res) => {
+  const { idProject, uid } = req.body;
+
+  try {
+    // Borramos el documento del proyecto correspondiente a partir de su ID
+    await deleteDoc(doc(db, "users", uid, "proyectos", idProject));
+    // Devolvemos un mensaje indicando que el proyecto se ha eliminado correctamente
+    res.json(`Proyecto id: ${idProject} eliminado`);
+
+  } catch (error) {
+    // Si se produce un error, devolvemos el mensaje de error en la respuesta
+    res.json(error);
+  }
+};
+
+export const metodosAdmin = { getProjectsByUId, deleteProjectById }
