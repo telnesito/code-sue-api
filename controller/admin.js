@@ -8,6 +8,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+import { authAdmin } from '../database/dbAdmin.js'
+
 const { db, auth } = services
 
 const getProjectsByUId = async (req, res) => {
@@ -54,14 +56,17 @@ const deleteProjectById = async (req, res) => {
 
 // Función para eliminar un usuario
 const deleteUserById = async (req, res) => {
-  const { uid, user } = req.body;
+  const { uid } = req.body;
 
   try {
     // Borramos el documento del proyecto correspondiente a partir de su ID
-    await deleteDoc(doc(db, "users", uid));
-    await deleteUser(user);
+    const responseDoc = await deleteDoc(doc(db, "users", uid));
+    const responseAuth = await authAdmin.deleteUser(uid)
     // Devolvemos un mensaje indicando que el proyecto se ha eliminado correctamente
-    res.json(`Usuario id: ${uid} eliminado`);
+    res.json({
+      "responseDoc": responseDoc,
+      "responseAuth": responseAuth
+    });
 
   } catch (error) {
     // Si se produce un error, devolvemos el mensaje de error en la respuesta
@@ -69,5 +74,25 @@ const deleteUserById = async (req, res) => {
   }
 };
 
+const verifiedUserById = async (req, res) => {
+  const { uid } = req.body
 
-export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById }
+  try {
+    const response = await authAdmin.updateUser(uid, {
+      emailVerified: true
+    })
+    const userDoc = doc(db, "users", uid);
+    await updateDoc(userDoc, {
+      state: true
+    })
+    res.json(response.toJSON())
+
+
+
+  } catch (error) {
+    res.json(error)
+  }
+
+}
+
+export const metodosAdmin = { getProjectsByUId, deleteProjectById, deleteUserById, verifiedUserById }
